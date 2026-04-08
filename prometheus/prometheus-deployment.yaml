@@ -1,44 +1,68 @@
-apiVersion: apps/v1
-kind: Deployment
+# ==================== DEPLOYMENT ====================
+
+apiVersion: apps/v1        # Deployment API
+kind: Deployment           # Creates and manages pods
+
 metadata:
-  name: prometheus
-  namespace: monitoring
+  name: prometheus         # Deployment name
+  namespace: monitoring    # Runs in monitoring namespace
+
 spec:
-  replicas: 1
+  replicas: 1              # Only 1 Prometheus pod
+
   selector:
     matchLabels:
-      app: prometheus
+      app: prometheus      # Select pods with this label
+
   template:
     metadata:
       labels:
-        app: prometheus
+        app: prometheus    # Pod label
+
     spec:
       containers:
-        - name: prometheus
-          image: prom/prometheus
+        - name: prometheus         # Container name
+          image: prom/prometheus   # Prometheus image
+
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
+            # Use config file from mounted path
+
           ports:
-            - containerPort: 9090
+            - containerPort: 9090  # Prometheus runs on port 9090
+
           volumeMounts:
             - name: config-volume
               mountPath: /etc/prometheus
+              # Mount config inside container
+
       volumes:
         - name: config-volume
           configMap:
             name: prometheus-config
----
+            # Connect ConfigMap to container
+
+
+# ==================== SERVICE ====================
+
 apiVersion: v1
-kind: Service
+kind: Service              # Exposes Prometheus
+
 metadata:
   name: prometheus-service
   namespace: monitoring
+
 spec:
+  type: NodePort           # Access using NodeIP + Port
+
   selector:
-    app: prometheus
+    app: prometheus        # Connect to Prometheus pods
+
   ports:
     - protocol: TCP
-      port: 9090
-      targetPort: 9090
-      nodePort: 32001 
-  type: NodePort
+      port: 9090           # Service port
+      targetPort: 9090     # Pod port
+      nodePort: 32001      # External port
+
+      # Flow:
+      # User → NodeIP:32001 → Service → Pod → Prometheus
