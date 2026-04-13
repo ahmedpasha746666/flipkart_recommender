@@ -6,6 +6,7 @@ from flipkart.rag_chain import RAGChainBuilder
 from dotenv import load_dotenv
 load_dotenv()
 
+
 REQUEST_COUNT = Counter("http_requests_total" , "Total HTTP Request")
 
 def create_app():
