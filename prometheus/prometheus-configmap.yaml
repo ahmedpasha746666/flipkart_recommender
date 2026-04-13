@@ -20,11 +20,3 @@ data:
         static_configs:
           - targets: ['34.133.227.191:5000']
 
-# ==================== SUMMARY ====================
-
-# ConfigMap → Stores Prometheus configuration file
-# prometheus.yml → Defines:
-#   1. How often to scrape (15s)
-#   2. What to scrape:
-#        - Prometheus itself
-#        - Flask application
