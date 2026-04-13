@@ -8,5 +8,5 @@ setup(
     version="0.1",
     author="ahmed pasha",
     packages=find_packages(),
-    install_requires = requirements,
+    install_requires = requirements, 
 )
